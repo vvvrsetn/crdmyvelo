@@ -1,0 +1,59 @@
+import React from 'react';
+import Icon from '../../../components/AppIcon';
+
+
+const QuickActions = ({ onNavigate }) => {
+  const actions = [
+    {
+      id: 'works',
+      label: 'Εργασίες',
+      icon: 'FileText',
+      color: 'bg-primary/10 text-primary',
+      path: '/works'
+    },
+    {
+      id: 'exams',
+      label: 'Εξετάσεις',
+      icon: 'GraduationCap',
+      color: 'bg-accent/10 text-accent',
+      path: '/exams'
+    },
+    {
+      id: 'analytics',
+      label: 'Αναλυτικά',
+      icon: 'BarChart3',
+      color: 'bg-success/10 text-success',
+      path: '/analytics'
+    },
+    {
+      id: 'schedule',
+      label: 'Πρόγραμμα',
+      icon: 'Calendar',
+      color: 'bg-warning/10 text-warning',
+      path: '/schedule'
+    }
+  ];
+
+  return (
+    <div className="card">
+      <h3 className="text-lg font-semibold text-foreground mb-4">Γρήγορες Ενέργειες</h3>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {actions?.map((action) => (
+          <button
+            key={action?.id}
+            onClick={() => onNavigate(action?.path)}
+            className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-muted transition-smooth focus-ring"
+            aria-label={action?.label}
+          >
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${action?.color}`}>
+              <Icon name={action?.icon} size={24} strokeWidth={2} />
+            </div>
+            <span className="text-sm font-medium text-foreground">{action?.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default QuickActions;
