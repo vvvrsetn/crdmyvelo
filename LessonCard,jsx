@@ -1,0 +1,91 @@
+import React from 'react';
+import Icon from '../../../components/AppIcon';
+import Button from '../../../components/ui/Button';
+
+const LessonCard = ({ lesson, onAddAbsence, onViewDetails }) => {
+  const getAbsenceStatus = () => {
+    const percentage = (lesson?.currentAbsences / lesson?.absenceLimit) * 100;
+    if (percentage >= 80) return { color: 'text-error', bg: 'bg-error/10', status: 'Κρίσιμο' };
+    if (percentage >= 60) return { color: 'text-warning', bg: 'bg-warning/10', status: 'Προσοχή' };
+    return { color: 'text-success', bg: 'bg-success/10', status: 'Καλά' };
+  };
+
+  const status = getAbsenceStatus();
+
+  return (
+    <div className="card hover:shadow-lg transition-smooth">
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-foreground mb-1 line-clamp-2">
+            {lesson?.name}
+          </h3>
+          <p className="text-sm text-muted-foreground flex items-center gap-2">
+            <Icon name="User" size={16} strokeWidth={2} />
+            {lesson?.instructor}
+          </p>
+        </div>
+        <div className={`${status?.bg} ${status?.color} px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap`}>
+          {status?.status}
+        </div>
+      </div>
+      <div className="space-y-3 mb-4">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">Απουσίες</span>
+          <span className={`text-lg font-semibold ${status?.color}`}>
+            {lesson?.currentAbsences} / {lesson?.absenceLimit}
+          </span>
+        </div>
+
+        <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+          <div
+            className={`h-full transition-all duration-300 ${
+              status?.color === 'text-error' ? 'bg-error' :
+              status?.color === 'text-warning' ? 'bg-warning' : 'bg-success'
+            }`}
+            style={{ width: `${Math.min((lesson?.currentAbsences / lesson?.absenceLimit) * 100, 100)}%` }}
+            role="progressbar"
+            aria-valuenow={lesson?.currentAbsences}
+            aria-valuemin="0"
+            aria-valuemax={lesson?.absenceLimit}
+            aria-label={`Απουσίες: ${lesson?.currentAbsences} από ${lesson?.absenceLimit}`}
+          />
+        </div>
+
+        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Icon name="Clock" size={14} strokeWidth={2} />
+            <span>{lesson?.hoursPerWeek}ω/εβδ</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Icon name="BookOpen" size={14} strokeWidth={2} />
+            <span>{lesson?.credits} ECTS</span>
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          iconName="Plus"
+          iconPosition="left"
+          onClick={() => onAddAbsence(lesson)}
+          className="flex-1"
+        >
+          Απουσία
+        </Button>
+        <Button
+          variant="default"
+          size="sm"
+          iconName="Eye"
+          iconPosition="left"
+          onClick={() => onViewDetails(lesson)}
+          className="flex-1"
+        >
+          Λεπτομέρειες
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default LessonCard;
